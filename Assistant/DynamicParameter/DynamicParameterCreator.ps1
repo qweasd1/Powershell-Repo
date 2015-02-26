@@ -1,46 +1,72 @@
-﻿function New-RuntimeDefinedParameter
+﻿
+function New-RuntimeDefinedParameterDictionary
 {
    param(
-   [string]$parameterType,
-   [Parameter(Mandatory=$true)]
-   [string]$parameterName,
-   [scriptblock]$ParameterAttributeScript
+   [scriptblock]$RuntimeDefinedParamtersBlock
    )
-   $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
 
-   function New-ParameterAttribute
+   $runtimeDefinedParameterDictionary = New-Object Management.Automation.RuntimeDefinedParameterDictionary
+
+   function New-RuntimeDefinedParameter
     {
        param(
-       [string]$ParameterSet,
-       [switch]$Mandatory,
-       [switch]$ValueFromPipeline
+       [string]$parameterType,
+       [Parameter(Mandatory=$true)]
+       [string]$parameterName,
+       [scriptblock]$ParameterAttributeScript
        )
+       $attributeCollection = New-Object System.Collections.ObjectModel.Collection[System.Attribute]
 
-       $attr = New-Object System.Management.Automation.ParameterAttribute
+       function New-ParameterAttribute
+        {
+           param(
+           [string]$ParameterSet,
+           [switch]$Mandatory,
+           [switch]$ValueFromPipeline
+           )
 
-       if ($ParameterSet)
-       {
-           $attr.ParameterSetName = $ParameterSet
-       }
+           $attr = New-Object System.Management.Automation.ParameterAttribute
 
-       if($Mandatory)
-       {
-           $attr.Mandatory = $true
-       }
+           if ($ParameterSet)
+           {
+               $attr.ParameterSetName = $ParameterSet
+           }
 
-       if ($ValueFromPipeline)
-       {
-           $attr.ValueFromPipeline = $true
-       }
+           if($Mandatory)
+           {
+               $attr.Mandatory = $true
+           }
 
-       $attributeCollection.Add($attr)
+           if ($ValueFromPipeline)
+           {
+               $attr.ValueFromPipeline = $true
+           }
+
+           $attributeCollection.Add($attr)
+        }
+
+        & $ParameterAttributeScript
+
+        $dynParameter = New-Object System.Management.Automation.RuntimeDefinedParameter  $parameterName,$parameterType, $attributeCollection
+
+        $runtimeDefinedParameterDictionary.Add($parameterName, $dynParameter)
     }
+  & $RuntimeDefinedParamtersBlock
 
-    & $ParameterAttributeScript
-
-    $dynParameter = NewObject System.Management.Automation.RuntimeDefinedParameter  $parameterName,$parameterType, $attributeCollection
+  $runtimeDefinedParameterDictionary
 }
 
+
+function New-RuntimeDefinedParameter
+{ 
+       param(
+       [string]$parameterType,
+       [Parameter(Mandatory=$true)]
+       [string]$parameterName,
+       [scriptblock]$ParameterAttributeScript
+       )
+
+}
 
 function New-ParameterAttribute
 {
@@ -66,4 +92,13 @@ function New-ParameterAttribute
    {
        $attr.ValueFromPipeline = $true
    }
+}
+
+function New-RuntimeDefinedParameterDictionary
+{
+   param(
+   [scriptblock]$RuntimeDefinedParamtersBlock
+   )
+
+   $runtimeDefinedParameterBlock = New-Object Management.Automation.RuntimeDefinedParameterDictionary
 }
