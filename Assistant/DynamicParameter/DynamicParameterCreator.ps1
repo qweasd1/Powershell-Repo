@@ -1,5 +1,6 @@
 ﻿#将所有的脚本改为只有不为空时才运行
-
+#TODO: 增加ValidateAttribute
+#TODO：增加New-XXX的Alias
 function New-RuntimeDefinedParameter
 { 
        param(
