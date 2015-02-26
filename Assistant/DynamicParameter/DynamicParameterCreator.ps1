@@ -38,7 +38,7 @@
 
     & $ParameterAttributeScript
 
-    $dynParameter = NewObject System.Management.Automation.RuntimeDefinedParameter  $parameterName,$parameterName, $attributeCollection
+    $dynParameter = NewObject System.Management.Automation.RuntimeDefinedParameter  $parameterName,$parameterType, $attributeCollection
 }
 
 
