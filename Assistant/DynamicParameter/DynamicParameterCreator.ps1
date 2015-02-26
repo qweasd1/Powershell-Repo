@@ -35,6 +35,7 @@ function New-ParameterAttribute
    {
        $attr.ValueFromPipeline = $true
    }
+   $attr
 }
 
 

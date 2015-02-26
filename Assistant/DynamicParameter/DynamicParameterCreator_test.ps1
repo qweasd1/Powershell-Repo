@@ -1,4 +1,13 @@
-﻿function dynamicParameterExample
+﻿
+function tt
+{
+New-Object System.Management.Automation.ParameterAttribute `
+        -Property @{
+        ParameterSetName = "set1"
+        }
+}
+
+function dynamicParameterExample
 {
     [cmdletbinding()]
     param (
@@ -7,13 +16,8 @@
     )
     dynamicparam
     {
-    if($path  -match "^HKLM:")
-    {
-        $attributes = New-Object System.Management.Automation.ParameterAttribute `
-        -Property @{
-        ParameterSetName = "set1"
-        Mandatory = $false
-        }
+    
+        
         $attributeCollection = New-Object `
         System.Collections.ObjectModel.Collection[System.Attribute]
         $attributeCollection.Add($attributes)
@@ -25,7 +29,7 @@
         $paramDictionary.Add("dp1", $dynParam1)
         
         $paramDictionary
-    }
+    
     }
 end { $psboundparameters }
 
@@ -42,20 +46,19 @@ function dynamicParameterExample
     )
     dynamicparam
     {
-    if($path  -match "^HKLM:")
-    {
-       #return New-RuntimeDefinedParameterDictionary {
-        #    New-RuntimeDefinedParameter -parameterName dp1 -parameterType int 
-        #}
-       & {
+    
          New-RuntimeDefinedParameterDictionary {
            New-RuntimeDefinedParameter -parameterName dp1 -parameterType int {
-            
+                New-ParameterAttribute -ParameterSet tt1
+           }
+
+           New-RuntimeDefinedParameter -parameterName dp2 -parameterType int {
+                New-ParameterAttribute -ParameterSet tt1
            }
         }
-        }
+    
         
-    }
+    
     }
 end { $psboundparameters }
 
