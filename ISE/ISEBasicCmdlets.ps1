@@ -1,4 +1,8 @@
-﻿#------------------- Select Section
+﻿#Dependency
+
+Add-Type -AssemblyName Microsoft.VisualBasic
+
+#------------------- Select Section
 #select section in current file
 function Select-CurrentFile
 {
@@ -46,4 +50,16 @@ function Replace-SelectText
 
 
 
+#------------------ InterAction
+
+# Show an InputBox
+# Default return is string.Empty
+function Show-InputBox
+{
+   param(
+   $Title = "Please Input",
+   $Description = "Please Input"
+   )
+   [Microsoft.VisualBasic.Interaction]::InputBox($Description,$Title)
+}
 
