@@ -169,6 +169,16 @@ function Delete-ISEText
     
 }
 
+#TODO:MOST:
+function BulkDelete-ISEText
+{
+    param(
+    [Parameter(ValueFromPipeline=$true)]
+    [System.Management.Automation.Language.Ast[]]$PsAsts
+    )
+    
+}
+
 #--------------------
 
    

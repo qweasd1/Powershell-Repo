@@ -197,7 +197,21 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("hide/show function", {
 
 # Bulk Hidden(ctrl+shift+alt+h): 
 # when you select an area, you want to hidden all these functions
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("bulk hidden", {
 
+    $selectFunctions = $psISE.CurrentFile.Editor.SelectedText | New-PsAst |  findAst -type FunctionDefinition
+
+    if ($selectFunctions.count -ne $null)
+    {
+        $recordedSelectedFuncNames = $selectFunctions |
+        select -ExpandProperty Name | 
+        ? { $Script:funcInfoRepo.HasFunction($_)}
+    }
+
+    
+
+    
+},"ctrl+shift+alt+h")
 
 # Rollback function(ctrl+shift+z):
 # when you are in function, you can roll back it to the snapshot you just save
