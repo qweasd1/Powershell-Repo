@@ -1,5 +1,8 @@
 ﻿# when you want fresh a function's definition:
 # put your caret inside the definition of the function, press "ctrl+shift+space"
+ 
+
+#TODO: every time you want refresh the function, we record the snapshot of the current function
 
 #this module require:
 # PSAstCore.ps1
