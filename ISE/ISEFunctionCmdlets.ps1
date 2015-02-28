@@ -174,16 +174,29 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("hide/show function", {
     {
         $hiddenFuncNames = $funcInfoRepo.GetHiddinFunctions()
         
+        if (($hiddenFuncNames.Count) -eq 0)
+        {
+            Show-MessageBox -Description "no hidden function"
+        }
         #Case 3
-        if (($hiddenFuncNames.Count) -eq 1)
+        elseif       
+        (($hiddenFuncNames.Count) -eq 1)
         {
             $onlyHiddenFuncName = $hiddenFuncNames[0]           
 
             Insert-ISEText ($funcInfoRepo.Show($onlyHiddenFuncName))
         }
+        else
+        {
+            $allHiddenFuncDefinitionTexts = $hiddenFuncNames | %{ $funcInfoRepo.GetCurrentByFuncName($_) }
+            BulkInsert-ISEText $allHiddenFuncDefinitionTexts
+        }
     }
 
 }, "ctrl+shift+h")
+
+# Bulk Hidden(ctrl+shift+alt+h): 
+# when you select an area, you want to hidden all these functions
 
 
 # Rollback function(ctrl+shift+z):

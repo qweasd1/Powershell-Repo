@@ -2,6 +2,15 @@
 
 Add-Type -AssemblyName Microsoft.VisualBasic
 
+
+
+#------initialize------
+$Script:NewLine = "`r`n"
+
+#-----------------
+
+
+
 #------------------- Select Section
 #select section in current file
 #select 
@@ -75,6 +84,19 @@ function Insert-ISEText
    $psISE.CurrentFile.Editor.InsertText($newText)
 }
 
+
+
+function BulkInsert-ISEText
+{
+    param(
+    [Parameter(ValueFromPipeline=$true)]
+    [string[]]$newTexts
+    )
+    $startColumnNumber = (Get-Caret).ColumnNumber
+    $rowDelimieter = $Script:NewLine * 2
+    $newText = ($newTexts | %{ Format-ISEText -originText $_ -StartColumn $startColumnNumber }) -join $rowDelimieter
+    $psISE.CurrentFile.Editor.InsertText($newText)
+}
 
 
 
