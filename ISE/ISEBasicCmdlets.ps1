@@ -52,7 +52,10 @@ function Insert-ISEText
    [Parameter(ValueFromPipeline=$true)]
    [string]$newText
    )
-
+   
+  $startColumnNumber = (Get-Caret).ColumnNumber
+  $newText = Format-ISEText -originText $newText -StartColumn $startColumnNumber
+   
    $psISE.CurrentFile.Editor.InsertText($newText)
 }
 

@@ -8,7 +8,10 @@
 Add-Type -Path D:\Repository\Powershell\ISE\FunctionCmdletDomainModel\FunctionCmdletDomainModel\bin\Debug\FunctionCmdletDomainModel.dll
 
 # PSAstCore.ps1
+. "D:\Repository\Powershell\ISE\ISEBasicCmdlets.ps1"
+. "D:\Repository\Powershell\Language\AST\PSAst\PSAstCore.ps1"
 ## TODO: how to load the module
+
 #Import-Module PSAstCore.ps1
 # TODO: ISEBasicCmdlets.ps1
 
@@ -131,5 +134,45 @@ else
 },"ctrl+shift+alt+d")   
 
 
+
+
+# Hide function(ctrl+shift+h): 
+# When you are in a function you can choose make the current function hide in repo
+# When you are in blank
+
+#TODO 1: when the function you are in not a function in repo, you can ask user whether they want to add it into the repo
+#TODO 2: when you are not in function, a GridView will show. You can show the function you want
+#Case 3: If there is only one function hidden, you can immediately show it, no need to show the GridView
+
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("hide/show function", {
+    $funcAst = Get-CurrentFunctionAst
+    if ($funcAst -ne $null)
+    {
+        $funcName = $funcAst.Name
+        if ($funcInfoRepo.HasFunction($funcName))
+        {
+            $funcInfoRepo.Hide($funcName)
+            Delete-ISEText -PsAst $funcAst
+        }
+        else
+        {
+            Show-MessageBox "information" "you can first added it"
+            #TODO 1
+        }
+    }
+    else
+    {
+        $hiddenFuncNames = $funcInfoRepo.GetHiddinFunctions()
+        
+        #Case 3
+        if (($hiddenFuncNames.Count) -eq 1)
+        {
+            $onlyHiddenFuncName = $hiddenFuncNames[0]           
+
+            Insert-ISEText ($funcInfoRepo.Show($onlyHiddenFuncName))
+        }
+    }
+
+}, "ctrl+shift+h")
 
 
