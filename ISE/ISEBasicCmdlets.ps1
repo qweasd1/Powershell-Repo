@@ -1,4 +1,18 @@
-﻿
+﻿#select section in current file
+function Select-CurrentFile
+{
+   param(
+   $StartLineNumber,
+   $StartColumnNumber,
+   $EndLineNumber,
+   $EndColumnNumber
+   )
+   
+   $psISE.CurrentFile.Editor.Select($StartLineNumber,$StartColumnNumber,$EndLineNumber,$EndColumnNumber)
+   
+}
+
+
 #select input PSAst in current file
 function Select-PSAst
 {
@@ -13,5 +27,7 @@ function Select-PSAst
 
    $psISE.CurrentFile.Editor.Select($PsAst.Extent.StartLineNumber,$PsAst.Extent.StartColumnNumber, $PsAst.Extent.EndLineNumber,$PsAst.Extent.EndColumnNumber)
 }
+
+
 
 
