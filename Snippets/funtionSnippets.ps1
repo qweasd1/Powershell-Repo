@@ -36,8 +36,7 @@ function Name
 New-IseSnippet -Title "vs" -Description "ValidatSet Attribute" -Text "[ValidateSet()]" -CaretOffset 13
 New-IseSnippet -Title "p" -Description "Parameter Attribute" -Text "[Parameter()]" -CaretOffset 11
 New-IseSnippet -Title "p-vfp" -Description "Parameter Attribute + ValueFromPipeline" -Text "[Parameter(ValueFromPipeline=`$true)]" -CaretOffset 34
-New-IseSnippet -Title "caret" -Description "Insert Get-Caret" -Text "(Get-Caret)" -CaretOffset 11
-New-IseSnippet -Title "caret-a" -Description "Insert Get-Caret array formate" -Text "(Get-Caret -Format array)" -CaretOffset 25
+
 
 
 
