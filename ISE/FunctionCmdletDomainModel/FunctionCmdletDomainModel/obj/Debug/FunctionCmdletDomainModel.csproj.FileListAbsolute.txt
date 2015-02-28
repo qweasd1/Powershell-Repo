@@ -1,0 +1,5 @@
+D:\Repository\Powershell\ISE\FunctionCmdletDomainModel\FunctionCmdletDomainModel\bin\Debug\FunctionCmdletDomainModel.dll
+D:\Repository\Powershell\ISE\FunctionCmdletDomainModel\FunctionCmdletDomainModel\bin\Debug\FunctionCmdletDomainModel.pdb
+D:\Repository\Powershell\ISE\FunctionCmdletDomainModel\FunctionCmdletDomainModel\obj\Debug\FunctionCmdletDomainModel.dll
+D:\Repository\Powershell\ISE\FunctionCmdletDomainModel\FunctionCmdletDomainModel\obj\Debug\FunctionCmdletDomainModel.pdb
+D:\Repository\Powershell\ISE\FunctionCmdletDomainModel\FunctionCmdletDomainModel\obj\Debug\FunctionCmdletDomainModel.csprojResolveAssemblyReference.cache
