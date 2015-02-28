@@ -14,23 +14,26 @@ function Get-CurrentFunctionAst
    $caretColumNumber = $psISE.CurrentFile.Editor.CaretColumn
 
    $functionAst =  ($currentAst | findAst -type FunctionDefinition -Depth Last -contains $caretLineNumber,$caretColumNumber)
-}
-
-function Run-FunctionDefinition
-{
-    param(
-    [System.Management.Automation.Language.Ast]$PsAst
-    )
-    Invoke-Expression $PsAst.ToString()
+   $functionAst
 }
 
 
 
+#---------------------------- add-on
+# Run and record function Definition
 $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("run definition", {
-    $functionAst = Get-CurrentFunctionAst  
+    $functionAst = (Get-CurrentFunctionAst)  
     if ($functionAst -ne $null)
     {
-        Run-FunctionDefinition $functionAst
+        Invoke-Expression ($functionAst.ToString())
     }
 
  },"ctrl+shift+space")  
+
+# Create function Definition
+
+
+function Name5
+{
+   "Hello "
+}
