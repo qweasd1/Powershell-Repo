@@ -206,9 +206,7 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("bulk hidden", {
         $recordedSelectedFuncNames = $selectFunctions |
         select -ExpandProperty Name | 
         ? { $Script:funcInfoRepo.HasFunction($_)}
-    }
-
-    
+    }  
 
     
 },"ctrl+shift+alt+h")

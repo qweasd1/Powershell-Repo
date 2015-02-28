@@ -5,13 +5,18 @@ Add-Type -AssemblyName Microsoft.VisualBasic
 
 
 #------initialize------
-$Script:NewLine = "`r`n"
 
 #-----------------
 
 
 
 #------------------- Select Section
+
+function Get-ISESelectedText
+{
+    $psISE.CurrentFile.Editor.SelectedText
+}
+
 #select section in current file
 #select 
 function Select-ISEText
