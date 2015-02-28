@@ -176,3 +176,26 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("hide/show function", {
 }, "ctrl+shift+h")
 
 
+# Rollback function(ctrl+shift+z):
+# when you are in function, you can roll back it to the snapshot you just save
+# TODO 1: if the function is not in repo, ask user whether they want to record it
+function test
+{
+    $funcAst = Get-CurrentFunctionAst
+    if ($funcAst -ne $null)
+    {
+        $funcName = $funcAst
+        if ($Script:funcInfoRepo.HasFunction($funcName))
+        {
+            try
+            {
+               $previousText = $funcInfoRepo.Rollback($funcName)
+               Replace-ISEText
+            }          
+            catch 
+            {
+                $Error[0].Exception.Message
+            }            
+        }
+    }
+}

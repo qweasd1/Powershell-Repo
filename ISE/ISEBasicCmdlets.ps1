@@ -71,9 +71,16 @@ function Replace-ISEText
    param(
    [Parameter(ValueFromPipeline=$true)]
    [string]$newText,
+   [Parameter(ParameterSetName = "Position")]
+   [System.Management.Automation.Language.Ast]
+   $PsAst,
+   [Parameter(ParameterSetName = "Position")]
    [int]$StartLineNumber,
+   [Parameter(ParameterSetName = "Position")]
    [int]$StartColumnNumber,
+   [Parameter(ParameterSetName = "Position")]
    [int]$EndLineNumber,
+   [Parameter(ParameterSetName = "Position")]
    [int]$EndColumnNumber
    )
    Select-ISEText $StartLineNumber $StartColumnNumber $EndLineNumber $EndColumnNumber
