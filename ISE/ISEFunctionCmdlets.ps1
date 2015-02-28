@@ -7,16 +7,6 @@
 #this module require:
 # PSAstCore.ps1
 
-function Get-CurrentFunction
-{
-   $currentAst = New-PsAst -text $psISE.CurrentFile.Editor.Text
-   $caretLineNumber = $psISE.CurrentFile.Editor.CaretLine
-   $caretColumNumber = $psISE.CurrentFile.Editor.CaretColumn
-
-   $functionAst =  ($currentAst | findAst -type FunctionDefinition -Depth Last -contains $caretLineNumber,$caretColumNumber)
-}
-
-
 $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("run definition", {
 
      $currentAst =  New-PsAst -text $psISE.CurrentFile.Editor.Text
@@ -24,7 +14,7 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("run definition", {
     $caretLineNumber = $psISE.CurrentFile.Editor.CaretLine
     $caretColumNumber = $psISE.CurrentFile.Editor.CaretColumn
 
-    
+    $functionAst =  ($currentAst | findAst -type FunctionDefinition -Depth First -contains $caretLineNumber,$caretColumNumber)
 
     if ($functionAst -ne $null)
     {
