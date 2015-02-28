@@ -48,7 +48,7 @@ function Get-PsAst
    [cmdletbinding()]
    param(
    [Parameter(ValueFromPipeline=$true)]
-   [System.Management.Automation.Language.Ast]$PsAst,
+   [System.Management.Automation.Language.Ast]$PsAst = (New-PsAst $psISE.CurrentFile.Editor.Text),
    [ValidateSet("Descent","Ancestor")]
    [string]$Direction = "Descent",
    [switch]$Single,
