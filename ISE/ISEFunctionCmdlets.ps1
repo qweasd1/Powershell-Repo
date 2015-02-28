@@ -16,12 +16,21 @@ function Get-CurrentFunctionAst
    $functionAst =  ($currentAst | findAst -type FunctionDefinition -Depth Last -contains $caretLineNumber,$caretColumNumber)
 }
 
+function Run-FunctionDefinition
+{
+    param(
+    [System.Management.Automation.Language.Ast]$PsAst
+    )
+    Invoke-Expression $PsAst.ToString()
+}
+
+
 
 $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("run definition", {
     $functionAst = Get-CurrentFunctionAst  
     if ($functionAst -ne $null)
     {
-        Invoke-Expression $functionAst.ToString()
+        Run-FunctionDefinition $functionAst
     }
 
  },"ctrl+shift+space")  
