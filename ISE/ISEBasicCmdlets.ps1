@@ -1,4 +1,5 @@
-﻿#select section in current file
+﻿#------------------- Select Section
+#select section in current file
 function Select-CurrentFile
 {
    param(
@@ -26,6 +27,21 @@ function Select-PSAst
    Write-Verbose "EndColumnNumber : $($PsAst.Extent.EndColumnNumber)"
 
    $psISE.CurrentFile.Editor.Select($PsAst.Extent.StartLineNumber,$PsAst.Extent.StartColumnNumber, $PsAst.Extent.EndLineNumber,$PsAst.Extent.EndColumnNumber)
+}
+
+#---------------- select section
+
+
+#---------------- replace section
+
+function Replace-SelectText
+{
+   param(
+   [Parameter(ValueFromPipeline=$true)]
+   [string]$newText
+   )
+
+   $psISE.CurrentFile.Editor.InsertText($newText)
 }
 
 
