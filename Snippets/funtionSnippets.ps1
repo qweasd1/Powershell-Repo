@@ -24,8 +24,8 @@ function Name
     )
 
     dynamicparam {
-        New-RuntimeDefinedParameterDictionary {
-            New-RuntimeDefinedParameter string Name {
+        dyn-dic {
+            dyn-parameter string Name {
                 
             }
         }

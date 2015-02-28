@@ -5,7 +5,7 @@
 
 
 ## 如果要使用dynamic Parameter你必须具具备以下几个条件：
-    # 1.param上面要有[cmdletbinding()]
+    # 1.param上面要有[cmdletbinding()](code snippet 中加入)
     # 2.RuntimeDefinedParameter 的Attribute中必须有一个ParameterAttribute（已在代码中检查此点） 
 
 #？ 假设有两个dynamic parameter 当输入一个dynamic Parameter时，在输入第二个parameter时能否捕获第一个dynamic parameter的值。并由捕获值来约束第二个
@@ -132,3 +132,7 @@ function New-RuntimeDefinedParameterDictionary
 }
 
 
+Set-Alias -Name dyn-dic -Value New-RuntimeDefinedParameterDictionary
+Set-Alias -Name dyn-parameter -Value New-RuntimeDefinedParameter
+Set-Alias -Name validateset -Value New-ValidateSet
+Set-Alias -Name attribute -Value New-ParameterAttribute
