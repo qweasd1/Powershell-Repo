@@ -4,7 +4,8 @@ Add-Type -AssemblyName Microsoft.VisualBasic
 
 #------------------- Select Section
 #select section in current file
-function Select-CurrentFile
+#select 
+function Select-ISEText
 {
    param(
    $StartLineNumber,
@@ -19,7 +20,7 @@ function Select-CurrentFile
 
 
 #select input PSAst in current file
-function Select-PSAst
+function Select-ISEPSAst
 {
    param(
    [Parameter(ValueFromPipeline=$true)]
@@ -35,10 +36,17 @@ function Select-PSAst
 
 #---------------- select section
 
+#---------------- Caret section
 
-#---------------- replace section
+function Get-Caret
+{
+    [pscustomobject]@{LineNumber = $psISE.CurrentFile.Editor.CaretLine;ColumnNumber=$psISE.CurrentFile.Editor.CaretColumn}    
+}
 
-function Replace-SelectText
+#----------------
+
+#---------------- insert section
+function Insert-ISEText
 {
    param(
    [Parameter(ValueFromPipeline=$true)]
@@ -50,6 +58,61 @@ function Replace-SelectText
 
 
 
+
+#--------------------------------
+
+#---------------- replace section
+
+function Replace-ISEText
+{
+   param(
+   [Parameter(ValueFromPipeline=$true)]
+   [string]$newText,
+   [int]$StartLineNumber,
+   [int]$StartColumnNumber,
+   [int]$EndLineNumber,
+   [int]$EndColumnNumber
+   )
+   Select-ISEText $StartLineNumber $StartColumnNumber $EndLineNumber $EndColumnNumber
+   $psISE.CurrentFile.Editor.InsertText($newText)
+}
+
+#-----------------------
+
+#---------------delete
+
+function Delete-ISEText
+{
+    param(
+    [Parameter(ParameterSetName="PsAst")]
+    [System.Management.Automation.Language.Ast]$PsAst,
+    [Parameter(ParameterSetName="Position")]
+    [int]$StartLineNumber,
+    [Parameter(ParameterSetName="Position")]
+    [int]$StartColumnNumber,
+    [Parameter(ParameterSetName="Position")]
+    [int]$EndLineNumber,
+    [Parameter(ParameterSetName="Position")]
+    [int]$EndColumnNumber
+    )
+    switch ($PSCmdlet.ParameterSetName)
+    {
+        'PsAst' {
+            $PsAst | Select-ISEPSAst
+            Insert-ISEText ""
+        }
+        
+        'Position' {
+            Replace-ISEText "" $StartLineNumber $StartColumnNumber $EndLineNumber $EndColumnNumber       
+        }
+        Default {}
+    }
+    
+}
+
+#--------------------
+
+   
 #------------------ InterAction
 
 # Show an InputBox
@@ -63,3 +126,30 @@ function Show-InputBox
    [Microsoft.VisualBasic.Interaction]::InputBox($Description,$Title)
 }
 
+function Show-MessageBox
+{
+   param(
+   $Title = "Information",
+   $Description = "This is a Information"
+   )
+   [System.Windows.MessageBox]::Show($Description,$Title)
+}
+
+
+
+#----------------------- format
+
+function Format-ISEText
+{
+    param(
+    [string]$originText,
+    [int]$StartColumn = 1,
+    [string]$RowDelimiter = "\r\n",
+    [string]$NewRowDelimieter = "`r`n"
+    )
+    [string]$indent = " " * ($StartColumn - 1)
+    $firstRow,$rest = ($originText -split $RowDelimiter)
+    $firstRow + $NewRowDelimieter + (( $rest| %{ "${indent}$_"}) -join $NewRowDelimieter)
+}
+            
+#------------------------
