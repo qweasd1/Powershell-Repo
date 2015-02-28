@@ -1,4 +1,5 @@
-﻿$AllAstTypes = [System.Management.Automation.Language.Ast].Assembly.ExportedTypes | ?{[System.Management.Automation.Language.Ast].IsAssignableFrom($_)}
+﻿##TODO: 修改一些Name_Ast_map 中的 key 为variable, function...这些更易使用的名字。同时修改function中$type上的Validateset的对应值
+$AllAstTypes = [System.Management.Automation.Language.Ast].Assembly.ExportedTypes | ?{[System.Management.Automation.Language.Ast].IsAssignableFrom($_)}
 $Name_Ast_map = @{}
 $AllAstTypes | foreach {
     $name = $_.Name -replace "AST$",""
@@ -122,7 +123,7 @@ function Get-PsAst
    }
 }
 
-
+Set-Alias -Name findAst -Value Get-PsAst
 
 
 function Construct-AstPredicate
@@ -199,14 +200,17 @@ function Contains-Position
    }
 }
 
-#? 从管道中输入一个数组，却只返回一个单值，这时为什么？
+# Which 用来构造PsAst的Predicate条件（scriptblock）
+#  
 function which
 {
+   [OutputType([scriptblock])]
    param(
    [Parameter(ValueFromPipeline=$true)]
-   $input
+   $PsAst
    )
-   $input
+   
+
 }
 
 
