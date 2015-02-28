@@ -7,15 +7,18 @@
 #this module require:
 # PSAstCore.ps1
 
+function Get-CurrentFunctionAst
+{
+   $currentAst = New-PsAst -text $psISE.CurrentFile.Editor.Text
+   $caretLineNumber = $psISE.CurrentFile.Editor.CaretLine
+   $caretColumNumber = $psISE.CurrentFile.Editor.CaretColumn
+
+   $functionAst =  ($currentAst | findAst -type FunctionDefinition -Depth Last -contains $caretLineNumber,$caretColumNumber)
+}
+
+
 $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("run definition", {
-
-     $currentAst =  New-PsAst -text $psISE.CurrentFile.Editor.Text
-    
-    $caretLineNumber = $psISE.CurrentFile.Editor.CaretLine
-    $caretColumNumber = $psISE.CurrentFile.Editor.CaretColumn
-
-    $functionAst =  ($currentAst | findAst -type FunctionDefinition -Depth First -contains $caretLineNumber,$caretColumNumber)
-
+    $functionAst = Get-CurrentFunctionAst  
     if ($functionAst -ne $null)
     {
         Invoke-Expression $functionAst.ToString()
