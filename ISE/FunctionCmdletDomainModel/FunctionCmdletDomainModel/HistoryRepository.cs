@@ -28,22 +28,27 @@ namespace PSCore
             Current = HistoryStack.Pop();
         }
 
-        public void Add(string historyText)
+        public void Add(string newText)
         {
             //first time you add a record
             if (Current == null)
             {
-                Current = historyText;
+                Current = newText;
                 return;
             }
 
-            if (RedoStack.Count > 0)
+            
+            if (Current!= newText)
             {
-                RedoStack.Clear();
-            }
+                if (RedoStack.Count > 0)
+                {
+                    RedoStack.Clear();
+                }
 
-            HistoryStack.Push(Current);
-            Current = historyText;
+                HistoryStack.Push(Current);
+                Current = newText;
+            }
+            
         }
 
         public void Redo()

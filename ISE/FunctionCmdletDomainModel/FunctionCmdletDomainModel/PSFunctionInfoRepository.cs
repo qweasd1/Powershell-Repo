@@ -38,7 +38,7 @@ namespace PSCore
             _funcIdentifier_funcHistory[_funcName_funcInfo[funcName].Guid].Add(newVersion);
         }
 
-        public void Hide(string funcName, string HideVersion)
+        public void Hide(string funcName)
         {
             if (!_funcName_funcInfo.ContainsKey(funcName))
             {
@@ -60,7 +60,7 @@ namespace PSCore
             return _funcIdentifier_funcHistory[funcInfo.Guid].Current;
         }
 
-        public bool IsShow(string funcName)
+        public bool IsHidden(string funcName)
         {
             if (!_funcName_funcInfo.ContainsKey(funcName))
             {
@@ -117,7 +117,10 @@ namespace PSCore
             return historyRep.Current;
         }
 
-
+        public string GetCurrentByFuncName(string funcName)
+        {
+            return getRepoByFuncName(funcName).Current;
+        }
 
         private HistoryRepository getRepoByFuncName(string funcName)
         {

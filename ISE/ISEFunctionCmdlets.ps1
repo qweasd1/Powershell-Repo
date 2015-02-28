@@ -36,13 +36,15 @@ $script:newFunctionTemplate = @"
 
  
 ## TODO List:
-#TODO: ctrl+shift+f: create a new function
-#TODO: ctrl+shift+d: delete a new function
-#TODO: ctrl+shift+n: rename an existing function
-#TODO: ctrl+shift+h: switch a function but not delete the history of the function
+#TODO: ctrl+shift+space: run and record function to repo
+ 
+#Case: ctrl+shift+f: create a new function
+#Case: ctrl+shift+d: delete a new function
+    #TODO: ctrl+shift+n: rename an existing function
+#Case: ctrl+shift+h: switch a function but not delete the history of the function
     #TODO: ctrl+shift+m: iterate a function's key part in intelligence
-#TODO: ctrl+shift+z: move back to a former version
-#TODO: ctrl+shift+x: move forward to a new version
+#Case: ctrl+shift+z: move back to a former version
+#Case: ctrl+shift+x: move forward to a new version
 
 #------------------------helper functions
 function Get-CurrentFunctionAst
@@ -61,13 +63,21 @@ function Get-CurrentFunctionAst
 #--------------------------------------------------------
 
 #---------------------------- add-on
-# Run and record function Definition
-$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Intelligence Run Function Definition", {
-    $functionAst = (Get-CurrentFunctionAst)  
-    if ($functionAst -ne $null)
+# Record function Definition(ctrl+shift+space)
+# TODO
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Record Function Definition", {
+    $funcAst = Get-CurrentFunctionAst  
+    
+    if ($funcAst -ne $null)
     {
+        $funcName = $funcAst.Name
+        $funcDeinitionText = $funcAst.ToString()
+        if ($funcInfoRepo.HasFunction($funcName))
+        {
+            $funcInfoRepo.Record($funcName,$funcDeinitionText)
+        }
         #run function definition
-        Invoke-Expression ($functionAst.ToString())
+        Invoke-Expression ($funcDeinitionText)
     }
 
  },"ctrl+shift+space")  
@@ -179,23 +189,56 @@ $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("hide/show function", {
 # Rollback function(ctrl+shift+z):
 # when you are in function, you can roll back it to the snapshot you just save
 # TODO 1: if the function is not in repo, ask user whether they want to record it
-function test
-{
+
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("rollback function", {
     $funcAst = Get-CurrentFunctionAst
     if ($funcAst -ne $null)
     {
-        $funcName = $funcAst
+        $funcName = $funcAst.Name
         if ($Script:funcInfoRepo.HasFunction($funcName))
         {
             try
             {
                $previousText = $funcInfoRepo.Rollback($funcName)
-               Replace-ISEText
+               Replace-ISEText -newText $previousText -PsAst $funcAst
             }          
             catch 
             {
-                $Error[0].Exception.Message
+                Show-MessageBox -Description "this is the first version"
             }            
         }
+        else
+        {
+            #TODO 1
+        }
     }
-}
+}, "ctrl+shift+z")
+
+
+# Redo function(ctrl+shift+x):
+# when you are in function, you can redo it to the snapshot you just save
+# TODO 1: if the function is not in repo, ask user whether they want to record it
+
+$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("redo function", {
+    $funcAst = Get-CurrentFunctionAst
+    if ($funcAst -ne $null)
+    {
+        $funcName = $funcAst.Name
+        if ($Script:funcInfoRepo.HasFunction($funcName))
+        {
+            try
+            {
+               $nextText = $funcInfoRepo.Redo($funcName)
+               Replace-ISEText -newText $nextText -PsAst $funcAst
+            }          
+            catch 
+            {
+                Show-MessageBox -Description "this is the latest version"
+            }            
+        }
+        else
+        {
+            #TODO 1
+        }
+    }
+}, "ctrl+shift+x")

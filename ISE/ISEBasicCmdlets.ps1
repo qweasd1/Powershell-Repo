@@ -40,7 +40,23 @@ function Select-ISEPSAst
 
 function Get-Caret
 {
-    [pscustomobject]@{LineNumber = $psISE.CurrentFile.Editor.CaretLine;ColumnNumber=$psISE.CurrentFile.Editor.CaretColumn}    
+    param(
+    [ValidateSet("array","psoject")]
+    [string]$Format = "psobject"
+    )
+
+    switch ($Format)
+    {
+        'array' {
+             $psISE.CurrentFile.Editor.CaretLine,$psISE.CurrentFile.Editor.CaretColumn
+        }
+        
+        'psobject' {
+            [pscustomobject]@{LineNumber = $psISE.CurrentFile.Editor.CaretLine;ColumnNumber=$psISE.CurrentFile.Editor.CaretColumn} 
+        }
+        Default {}
+    }
+  
 }
 
 #----------------
@@ -71,7 +87,7 @@ function Replace-ISEText
    param(
    [Parameter(ValueFromPipeline=$true)]
    [string]$newText,
-   [Parameter(ParameterSetName = "Position")]
+   [Parameter(ParameterSetName = "PsAst")]
    [System.Management.Automation.Language.Ast]
    $PsAst,
    [Parameter(ParameterSetName = "Position")]
@@ -83,8 +99,19 @@ function Replace-ISEText
    [Parameter(ParameterSetName = "Position")]
    [int]$EndColumnNumber
    )
-   Select-ISEText $StartLineNumber $StartColumnNumber $EndLineNumber $EndColumnNumber
-   $psISE.CurrentFile.Editor.InsertText($newText)
+
+   switch ($PSCmdlet.ParameterSetName)
+   {
+       'Position' {
+        Select-ISEText $StartLineNumber $StartColumnNumber $EndLineNumber $EndColumnNumber
+       }
+       'PsAst' {
+        Select-ISEPSAst $PsAst
+       }
+       Default {}
+   }
+   
+   Insert-ISEText $newText 
 }
 
 #-----------------------
